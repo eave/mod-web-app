@@ -25,6 +25,7 @@ export default Router.extend({
     '': 'public',
     'repos': 'repos',
     'login': 'login',
+    'logout': 'logout',
     'auth/callback?:query': 'authCallback'
   },
 
@@ -43,6 +44,11 @@ export default Router.extend({
       redirect_uri: window.location.origin + '/auth/callback',
       scope: 'user,repo'
     })
+  },
+
+  logout () {
+    window.localStorage.clear()
+    window.location = '/'
   },
 
   authCallback (query) {
