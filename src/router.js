@@ -8,6 +8,17 @@ import ReposPage from './pages/repos'
 import RepoDetail from './pages/repo-detail'
 import Layout from './layout'
 import config from './config'
+import MessagePage from './pages/message'
+
+function requiresAuth(handlerName) {
+  return function() {
+    if (app.me.token) {
+      this[handlerName].apply(this, arguments);
+    } else {
+      this.redirectTo('/')
+    }
+  }
+}
 
 export default Router.extend({
   renderPage (page, opts = {layout: true}) {
@@ -24,11 +35,12 @@ export default Router.extend({
 
   routes: {
     '': 'public',
-    'repos': 'repos',
+    'repos': requiresAuth('repos'),
     'login': 'login',
     'logout': 'logout',
-    'repo/:owner/:name': 'repoDetail',
-    'auth/callback?:query': 'authCallback'
+    'repo/:owner/:name': requiresAuth('repoDetail'),
+    'auth/callback?:query': 'authCallback',
+    '*fourOhfour': 'fourOhfour'
   },
 
   public () {
@@ -70,5 +82,11 @@ export default Router.extend({
       app.me.token = body.token
       this.redirectTo('/repos')
     })
+
+    this.renderPage(<MessagePage title='Fetching your data'/>)
+  },
+
+  fourOhfour () {
+    this.renderPage(<MessagePage title='Not found' body='Sorry, nothing here.'/>)
   }
 })
