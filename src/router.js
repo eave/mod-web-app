@@ -7,8 +7,8 @@ import PublicPage from './pages/public'
 import ReposPage from './pages/repos'
 import RepoDetail from './pages/repo-detail'
 import Layout from './layout'
-import config from './config'
 import MessagePage from './pages/message'
+import config from './config'
 
 function requiresAuth(handlerName) {
   return function() {
